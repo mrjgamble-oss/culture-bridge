@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Culture Bridge | 台美文化橋樑</title>
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary: #4A90E2; /* Blue for US */
+            --secondary: #E2584A; /* Red for Taiwan */
+            --bg: #F0F4F8;
+            --card-bg: #ffffff;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Friendly font */
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+            color: var(--text);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 { margin: 0; font-size: 2.5rem; }
+        header p { margin: 5px 0 0; font-size: 1.2rem; opacity: 0.9; }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Input Section */
+        .post-box {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border: 3px solid #FFD700; /* Gold border */
+        }
+
+        .post-box h2 { margin-top: 0; color: var(--primary); }
+
+        .form-group { margin-bottom: 15px; }
+        
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box; /* Fixes padding issues */
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        button:hover { background-color: #218838; }
+
+        /* Filters */
+        .filters {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .filter-btn {
+            background: white;
+            border: 2px solid #ccc;
+            padding: 8px 16px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Feed Section */
+        .feed {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        /* Country Tags */
+        .tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            border-bottom-left-radius: 10px;
+        }
+        .tag-tw { background-color: var(--secondary); }
+        .tag-us { background-color: var(--primary); }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #eee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+
+        .author-name { font-weight: bold; }
+        .post-category { font-size: 0.85rem; color: #666; }
+
+        .card-content { font-size: 1.1rem; line-height: 1.4; margin-bottom: 15px; }
+
+        .card-footer {
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .like-btn {
+            cursor: pointer;
+            color: #e0245e;
+            font-size: 1.2rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>The Culture Bridge 🌏</h1>
+        <p>Sharing Daily Life: Taiwan & USA | 分享日常生活: 台灣與美國</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="post-box">
+            <h2>✨ Share a Moment | 分享時刻</h2>
+            <form id="postForm">
+                <div class="form-group">
+                    <label>My Name (名字):</label>
+                    <input type="text" id="nameInput" placeholder="e.g., Alex or 小明" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>I am from (我來自):</label>
+                    <select id="countryInput">
+                        <option value="Taiwan">Taiwan 🇹🇼</option>
+                        <option value="USA">USA 🇺🇸</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Category (類別):</label>
+                    <select id="categoryInput">
+                        <option value="Food 🍱">Food (食物)</option>
+                        <option value="School 🏫">School (學校)</option>
+                        <option value="Play ⚽">Play/Hobby (玩樂)</option>
+                        <option value="Holiday 🎉">Holiday (節日)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>My Story (我的故事):</label>
+                    <textarea id="messageInput" rows="3" placeholder="Today I ate..." required></textarea>
+                </div>
+
+                <button type="submit">Post it! (發布)</button>
+            </form>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterPosts('all')">All</button>
+            <button class="filter-btn" onclick="filterPosts('Taiwan')">Taiwan Only 🇹🇼</button>
+            <button class="filter-btn" onclick="filterPosts('USA')">USA Only 🇺🇸</button>
+        </div>
+
+        <div id="feed" class="feed">
+            </div>
+
+    </div>
+
+    <script>
+        // --- JAVASCRIPT LOGIC ---
+
+        // 1. Initial Sample Data (So the page isn't empty)
+        let posts = [
+            {
+                id: 1,
+                name: "Liam",
+                country: "USA",
+                category: "Food 🍱",
+                message: "We had pizza for lunch today! It was pepperoni.",
+                likes: 5,
+                time: "10:30 AM"
+            },
+            {
+                id: 2,
+                name: "Mei-Ling (美玲)",
+                country: "Taiwan",
+                category: "School 🏫",
+                message: "We took a nap at our desks after lunch. It is called wu jiao (午覺).",
+                likes: 12,
+                time: "1:00 PM"
+            },
+            {
+                id: 3,
+                name: "Jayden",
+                country: "USA",
+                category: "Play ⚽",
+                message: "I played kickball at recess. It was freezing outside!",
+                likes: 3,
+                time: "2:15 PM"
+            }
+        ];
+
+        // 2. Function to Render Posts
+        const feedContainer = document.getElementById('feed');
+
+        function renderPosts(filter = 'all') {
+            feedContainer.innerHTML = ""; // Clear current feed
+
+            // Filter the array based on button click
+            const filteredPosts = posts.filter(post => {
+                if (filter === 'all') return true;
+                return post.country === filter;
+            });
+
+            // Loop through data and create HTML cards
+            filteredPosts.forEach(post => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                // Determine Tag Color
+                const tagClass = post.country === 'Taiwan' ? 'tag-tw' : 'tag-us';
+                const flag = post.country === 'Taiwan' ? '🇹🇼' : '🇺🇸';
+
+                card.innerHTML = `
+                    <div class="tag ${tagClass}">${post.country}</div>
+                    <div class="card-header">
+                        <div class="avatar">${post.name.charAt(0)}</div>
+                        <div>
+                            <div class="author-name">${post.name}</div>
+                            <div class="post-category">${post.category}</div>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        ${post.message}
+                    </div>
+                    <div class="card-footer">
+                        <span>${post.time}</span>
+                        <span class="like-btn" onclick="likePost(${post.id})">❤ ${post.likes}</span>
+                    </div>
+                `;
+                
+                // Add new posts to the top
+                feedContainer.prepend(card);
+            });
+        }
+
+        // 3. Handle Form Submission
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Stop page reload
+
+            const name = document.getElementById('nameInput').value;
+            const country = document.getElementById('countryInput').value;
+            const category = document.getElementById('categoryInput').value;
+            const message = document.getElementById('messageInput').value;
+            
+            // Create new post object
+            const newPost = {
+                id: Date.now(), // Unique ID based on time
+                name: name,
+                country: country,
+                category: category,
+                message: message,
+                likes: 0,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+
+            // Add to array
+            posts.push(newPost);
+
+            // Clear form
+            document.getElementById('postForm').reset();
+
+            // Re-render feed
+            renderPosts('all');
+            
+            alert("Great job! Your post is live. (Note: Since this is a demo, it will disappear if you refresh the page.)");
+        });
+
+        // 4. Like Function
+        function likePost(id) {
+            const post = posts.find(p => p.id === id);
+            if(post) {
+                post.likes++;
+                renderPosts('all'); // Re-render to show new number
+            }
+        }
+
+        // 5. Filter Function
+        function filterPosts(country) {
+            // Update button styles
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Re-render
+            renderPosts(country);
+        }
+
+        // Initial Render
+        renderPosts();
+
+    </script>
+</body>
+</html>
